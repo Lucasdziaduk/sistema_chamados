@@ -20,7 +20,9 @@ def listar_chamados(chamados):
         print("Nenhum chamado registrado.")
 # Função para finalizar chamados
 def finalizar_chamados(chamados, id):
-    chamados[id]
+    for d in chamados:
+        if d["id"] == id:
+            d["status"] = 'finalizado'
 
 # Função para remover chamados finalizados
 def remover_chamados_finalizados(chamados):
@@ -51,20 +53,41 @@ def reverter_lista(chamados):
     chamados_invertido = chamados[::-1]
     print(chamados_invertido)
 
-
+def buscar_chamados(chamados):
+    criterio = input("Deseja buscar por ID ou Descrição? (Digite 'ID' ou 'Descrição'): ").lower()
+    if criterio == 'id':
+        id_busca = input("Digite o ID do chamado: ")
+        encontrados = [chamado for chamado in chamados if chamado["id"] == id_busca]
+    elif criterio == 'descrição':
+        descricao_busca = input("Digite a descrição do chamado (ou parte dela): ").lower()
+        encontrados = [chamado for chamado in chamados if descricao_busca in chamado["descricao"].lower()]
+    else:
+        print("Critério inválido! Use 'ID' ou 'Descrição'.")
+        return
+    
+    if encontrados:
+        for chamado in encontrados:
+            print(f"ID: {chamado['id']}, Descrição: {chamado['descricao']}, Prioridade: {chamado['prioridade']}, Status: {chamado['status']}")
+    else:
+        print("Nenhum chamado encontrado.")
 
 
 # Função para rodar o sistema de chamados
 def rodar_sistema():
     while True:
-        print("\n1. Cadastrar Chamado")
-        print("2. Listar Chamados")
-        print("3. Remover Chamados Finalizados")
-        print("4. Listar Chamados por Prioridade")
-        print("5. Exibir Estatísticas")
-        print("6. Limpar Lista de Chamados")
-        print("7. inverter a lista de chamados")
-        print("8. Sair")
+        print("       SISTEMAS DE CHAMADOS        ")
+        print("+===================================+")
+        print("|1. Cadastrar Chamado               |")
+        print("|2. Listar Chamados                 |")
+        print("|3. Remover Chamados Finalizados    |")
+        print("|4. Listar Chamados por Prioridade  |")
+        print("|5. Exibir Estatísticas             |")
+        print("|6. Limpar Lista de Chamados        |")
+        print("|7. Inverter a Lista de Chamados    |")
+        print("|8. Buscar Chamado                  |")
+        print("|9. Finalizar Chamado               |")
+        print("|10. Sair                           |")
+        print("+===================================+")
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
@@ -75,7 +98,7 @@ def rodar_sistema():
             cadastrar_chamado(chamados, id, descricao, prioridade)
         elif opcao == "2":
             listar_chamados(chamados)
-        elif opcao == "3":
+        elif opcao == "3": 
             remover_chamados_finalizados(chamados)
         elif opcao == "4":
             listar_por_prioridade(chamados)
@@ -86,6 +109,11 @@ def rodar_sistema():
         elif opcao == "7":
             reverter_lista(chamados)
         elif opcao == "8":
+            buscar_chamados(chamados)
+        elif opcao == "9":
+            id2 = input("Digite o ID do chamado para finalizar:")
+            finalizar_chamados(chamados, id2)
+        elif opcao == "10":
             print("Saindo do sistema...")
             break
         else:
